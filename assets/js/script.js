@@ -5,6 +5,19 @@ const resultsModal = new bootstrap.Modal(document.getElementById("resultsModal")
 document.getElementById("status").addEventListener("click", e => getStatus(e));
 document.getElementById("submit").addEventListener("click", e => postForm(e))
 
+// display error with modal
+function displayException(data){
+    let heading = "An Exception Occurred"
+    let results = `The API returned status code <span>${data.status_code}</span>`
+    results += `<div>Error number: <strong>${data.error_no}</strong></div>`
+    results += `<div>Error text: <strong>${data.error}</strong></div>` 
+
+    document.getElementById("resultsModalTitle").innerText = heading;
+    document.getElementById("results-content").innerHTML = results;
+
+    resultsModal.show()
+}
+
 // Check that values are right as required by API
 
 function processData(form){
@@ -39,6 +52,7 @@ async function postForm(e){
     if (response.ok){
         displayError(data)
     }else{
+        displayException(data)
         throw new Error(data.error);
     }
 }
@@ -71,6 +85,7 @@ async function getStatus(e){
     if (response.ok){
         displayData(data)
     } else{
+        displayException(data)
         throw new Error(data.error)
     }
 }
